@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: adhdplanner-app
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "80:80"
+    depends_on:
+      - redis
+    volumes:
+      - .:/var/www/html
+    networks:
+      - backend
+
+  queue:
+    build:
+      context: .
+    container_name: adhdplanner-queue
+    command: php artisan queue:work --tries=3 --timeout=60
+    depends_on:
+      - app
+    env_file: .env
+    volumes:
+      - .:/var/www/html
+    networks:
+      - backend
+
+  redis:
+    image: redis:alpine
+    container_name: adhdplanner-redis
+    restart: unless-stopped
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
