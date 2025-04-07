@@ -126,9 +126,14 @@ A separate interface for managing time-based habits and self-care routines.
 🔁 Load Balancer (DO-native or Traefik/HAProxy)
 🔐 HTTPS via Certbot (if self-hosted Nginx)
 
+### Hosting notes (additonal)
+- Queue Worker shouldb ein a searate container for scale
+- Laravel Horizon for queue management
+- Laravel Queue Worker for processing incoming tasks
+- AI Processing Worker for handling complex inputs
+- Load balancing and horizontal scaling options available as needed.
 ---
 
-```markdown
 ## 🤖 AI Integration
 
 The ADHD Planner will include **natural language task input** via AI to reduce friction and support neurodivergent workflows. This feature enables users to create, update, or manage tasks using plain language — via the app, SMS, or email.
@@ -168,7 +173,7 @@ POST /api/incoming-task
 
 ---
 
-#### 🧠 OpenAI Integration (Function Calling)
+### 🧠 OpenAI Integration (Function Calling)
 
 The input is sent to **OpenAI GPT-4 Turbo** using [function calling](https://platform.openai.com/docs/guides/function-calling) to produce structured task data.
 
@@ -191,7 +196,7 @@ The input is sent to **OpenAI GPT-4 Turbo** using [function calling](https://pla
 }
 ```
 
-**AI Output**:
+**###AI Output**:
 ```json
 {
   "taskName": "Schedule car inspection",
@@ -204,7 +209,7 @@ The input is sent to **OpenAI GPT-4 Turbo** using [function calling](https://pla
 
 ---
 
-#### 🧰 Laravel Backend Integration
+## 🧰 Laravel Backend Integration
 
 ##### 📥 Incoming Task Controller (example stub)
 ```php
