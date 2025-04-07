@@ -6493,3 +6493,127 @@ Before live launch we will need to implement logic/database strucutres to log.
 2) Presentation activity
 3) Any system issues/messages
 4) Whatever else we decide to add.
+
+---
+
+## 🤖 AI Integration (Planned)
+
+ScriptAssist will incorporate targeted AI features to support sales agents during live presentations, reduce mental load, and personalize the experience without breaking script flow.
+
+### 🔑 Planned AI Use Cases
+
+- **Rebuttal Generator** – AI suggests 1–3 phrased responses to common objections, based on script section or keyword input.
+- **Script Rephraser** – Allows agents to simplify or rewrite script lines with clearer or more natural phrasing.
+- **Script Summary / Section Summary** – Quick agent-facing review of a script or section before a presentation.
+- **Post-Call Summary Generator** – Summarizes what was covered and suggests follow-up actions or notes.
+- **Training Coach (future)** – Contextual assistant that explains purpose or intent of each section.
+
+These features are designed to enhance usability, agent confidence, and reduce pre-call prep time — especially for new hires.
+
+---
+
+## 🧰 AI Tech Stack Additions
+
+| Component | Description |
+|----------|-------------|
+| **OpenAI GPT-4 Turbo** | Primary LLM for structured prompting (via API + function calling optional) |
+| **Laravel HTTP Client** | Handles outbound requests to OpenAI |
+| **Laravel Queue** (recommended) | For async or delayed AI task processing |
+| **Secure API Route** | Authenticated POST endpoint for AI tool requests |
+
+---
+
+# 💬 Prompt Structure: Rebuttal Generator
+
+> This is the structure used to call OpenAI and generate 1–3 rebuttals.
+
+### 🧠 Prompt Template
+
+```text
+You are a sales assistant helping a phone agent respond to customer objections in a respectful and persuasive way.
+
+Context:
+- Script Section: {{section_name}}
+- Objection Type or Keyword: {{objection_type}}
+- Tone Preference: {{tone}} (e.g., friendly, firm, logical, empathetic)
+
+Please provide 2–3 phrased rebuttals that the agent could say naturally during the call. Each should be clear, non-aggressive, and concise.
+```
+---
+
+#### Sample Call (Laravel)
+
+```php
+
+$response = Http::withToken(config('services.openai.key'))
+    ->post('https://api.openai.com/v1/chat/completions', [
+        'model' => 'gpt-4-1106-preview',
+        'messages' => [
+            ['role' => 'system', 'content' => 'You are a sales assistant helping phone agents craft persuasive rebuttals.'],
+            ['role' => 'user', 'content' => $prompt],
+        ],
+        'temperature' => 0.7,
+    ]);
+
+
+```
+
+---
+
+#### Laravel Controller Stub
+
+```php
+
+<?php
+// routes/api.php
+Route::post('/rebuttal', [AIRebuttalController::class, 'generate'])->middleware('auth:sanctum');
+
+// app/Http/Controllers/AIRebuttalController.php
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+
+class AIRebuttalController extends Controller
+{
+    public function generate(Request $request)
+    {
+        $request->validate([
+            'section' => 'required|string',
+            'objection' => 'required|string',
+            'tone' => 'nullable|string',
+        ]);
+
+        $prompt = "You are a sales assistant helping a phone agent respond to customer objections in a respectful and persuasive way.\n\n" .
+                  "Context:\n" .
+                  "- Script Section: {$request->section}\n" .
+                  "- Objection Type or Keyword: {$request->objection}\n" .
+                  "- Tone Preference: {$request->tone ?? 'friendly'}\n\n" .
+                  "Please provide 2–3 phrased rebuttals that the agent could say naturally during the call. Each should be clear, non-aggressive, and concise.";
+
+        $response = Http::withToken(config('services.openai.key'))
+            ->post('https://api.openai.com/v1/chat/completions', [
+                'model' => 'gpt-4-1106-preview',
+                'messages' => [
+                    ['role' => 'system', 'content' => 'You are a sales assistant helping phone agents craft persuasive rebuttals.'],
+                    ['role' => 'user', 'content' => $prompt],
+                ],
+                'temperature' => 0.7,
+            ]);
+
+        return response()->json([
+            'rebuttals' => $response['choices'][0]['message']['content'] ?? 'Sorry, no suggestions available right now.',
+        ]);
+    }
+}
+
+
+```
+
+
+---
+
+
+
+
+
