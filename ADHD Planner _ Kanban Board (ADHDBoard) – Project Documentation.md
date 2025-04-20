@@ -643,3 +643,110 @@ app.get('/users', async (req, res) => {
 });
 ```
 
+✅ Dev Strategy: “Scaffold Now, Bloom Later”
+🔧 What to Include for MVP (Scaffolding)
+Add a notes table to the DB schema (even if unused at first)
+
+Create a basic internal API route like POST /capture and GET /capture
+
+Add a placeholder “Capture” page or tab in the UI (“Coming soon!” or a basic note entry box)
+
+Treat note.id as an optional foreign key in future task/project tables
+
+Where to Track It
+✅ You’re adding it to the project planning doc ✅
+
+✅ You’ve logged it in OneNote ✅
+
+I’ve also got it locked in memory (and bio)
+
+## Feature Spec: Note Capture Zone (ADHDBoard)
+
+### Overview
+The Note Capture Zone is a dedicated feature designed to act as a mental inbox for users to quickly offload thoughts, ideas, tasks, links, files, and references. Inspired by Google Keep, OneNote, and Getting Things Done (GTD), it enables low-friction capture and high-flexibility sorting.
+
+This feature will be included in the MVP scaffolding but implemented in a later phase.
+
+---
+
+### Goals
+- Reduce cognitive load for users with ADHD by externalizing memory
+- Allow for fast, unstructured capture of any type of input
+- Enable sorting and assignment of notes later (to tasks, projects, calendar items)
+- Keep the system gentle, forgiving, and flexible
+
+---
+
+### Core MVP Fields for `notes` Table
+```sql
+CREATE TABLE notes (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  user_id INT,
+  title VARCHAR(255),
+  content TEXT,
+  image_url TEXT,
+  audio_url TEXT,
+  is_archived BOOLEAN DEFAULT FALSE,
+  linked_task_id INT,
+  linked_project_id INT,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (linked_task_id) REFERENCES tasks(id),
+  FOREIGN KEY (linked_project_id) REFERENCES projects(id)
+);
+```
+
+---
+
+### Phase 1 Features (Scaffolding Enabled)
+- Basic `POST /capture` and `GET /capture` endpoints
+- Frontend placeholder UI or tab with a basic note input form
+- All new notes default to `is_archived = false`, `linked_* = NULL`
+- No strict categorization required
+
+---
+
+### Phase 2 Features (Full Implementation)
+- Attach captured notes to existing tasks, projects, or calendar entries
+- Allow file/image/audio upload
+- Add tags and filtering options
+- Enable reminders or follow-up prompts
+- Allow color coding, pinning, and archiving
+- Support capture via email/SMS input (future API integrations)
+
+---
+
+### Long-Term Stretch Ideas
+- Mobile-first interface or quick-add widget
+- Browser extension or desktop clipper
+- Transcription of voice/audio notes
+- Daily/weekly "unsorted notes" review prompt
+- Auto-suggestion of linking ("This note mentions Project A")
+
+---
+
+### UX Notes
+- Notes should be shown in a low-pressure interface (no deadlines or overdue labels)
+- Display in card-style layout similar to Google Keep or Apple Notes
+- First-time use can be blank canvas or fun placeholder note ("Drop your thoughts here")
+
+---
+
+### Dev Notes
+- Minimal backend footprint
+- Should not require note categorization or link at creation time
+- Indexed by `user_id` and `created_at` for future dashboard integrations
+
+---
+
+### Status
+✅ Planned and included in database scaffolding
+❌ Not yet implemented in MVP UI or API
+
+---
+
+**Author:** ADHDBoard Planning Team  
+**Status:** Scaffolded for future expansion  
+**Last Updated:** 2025-04-20
+
