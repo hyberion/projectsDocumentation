@@ -750,3 +750,100 @@ CREATE TABLE notes (
 **Status:** Scaffolded for future expansion  
 **Last Updated:** 2025-04-20
 
+Feature Spec: "Clarity" AI Companion (ADHDBoard)
+
+Overview
+
+"Clarity" is a planned AI-powered assistant designed to support users with ADHD by learning from their behavior and providing gentle, adaptive suggestions to support habit building, task management, and idea capture. It will be added as a future module after the MVP, but its structure will be scaffolded early.
+
+Conceptual Role
+
+🫠 External cognitive aid for users with executive function challenges
+
+👥 Learns passively from patterns, not through interrogation
+
+🕵️ Acts like a guide, not a manager
+
+🤝 Offers help without pressure, judgment, or shame
+
+Potential Features (Roadmapped by Phase)
+
+⛏ Phase 1: Passive Intelligence (MVP-adjacent)
+
+Auto-tagging notes based on content using OpenAI API
+
+Natural language to task conversion ("Pay rent Friday" → task with due date)
+
+Suggesting project or task categories when saving notes
+
+🔄 Phase 2: Pattern Recognition & Nudging
+
+Track task completion times/types (when and what gets done)
+
+Identify trends (e.g., user prefers working late, avoids certain task types)
+
+Weekly summaries ("You completed 4 tasks this week, mostly after 5pm")
+
+Nudge system: "Want to prep for your usual Thursday focus session?"
+
+🌱 Phase 3: Adaptive Habit Support
+
+Suggests routines and repeating tasks based on user patterns
+
+Energy-based suggestions: "This looks like a high-focus task. Try it when you're in the zone?"
+
+AI-generated reflections ("Want to review your captured ideas this weekend?")
+
+Smart suggestion system for linking notes to projects/tasks
+
+Ethical & UX Principles
+
+✉️ Always ask permission before AI-driven behavior suggestions
+
+❌ Never penalize or shame inconsistent behavior
+
+🔐 Ensure user privacy by limiting data scope or keeping AI local when possible
+
+✨ Always frame AI as supportive, optional, and opt-in
+
+Technical Considerations
+
+Likely requires usage metrics: task timestamps, capture frequency, etc.
+
+Initial implementation can rely on OpenAI or similar external LLM APIs
+
+Future-proofing for potential local LLM deployment
+
+Store in separate ai_assistant_logs or usage_analytics table (optional)
+
+UI Considerations
+
+Lives in sidebar panel, floating assistant button, or collapsible drawer
+
+Soft voice or visual tone: friendly, neutral, non-intrusive
+
+Interactions feel more like a journal prompt than a command
+
+Database Scaffolding Ideas (Optional for Now)
+
+CREATE TABLE ai_suggestions (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  user_id INT,
+  suggestion_type VARCHAR(100),
+  suggestion_text TEXT,
+  related_note_id INT,
+  related_task_id INT,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  viewed BOOLEAN DEFAULT FALSE,
+  accepted BOOLEAN DEFAULT NULL,
+  FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+Status
+
+✅ Concept scoped and philosophically aligned
+✅ Future scaffolding planned
+❌ Not included in MVP functionality
+
+Author: ADHDBoard Planning TeamStatus: Deferred Feature, Scaffold ReadyLast Updated: 2025-04-20
+
