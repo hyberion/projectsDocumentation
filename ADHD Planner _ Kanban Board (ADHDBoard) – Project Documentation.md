@@ -464,3 +464,182 @@ server {
 | Scaling | Add containers → connect to LB → done |
 
 ---
+
+Added 4/20/25
+
+## ADHDBoard — Environment Setup (Node + Docker + PowerShell)
+
+### ✅ Tech Stack:
+- **Node.js + Express** for the backend
+- **MySQL** as the database
+- **Sequelize ORM**
+- **Docker + Docker Compose**
+- **PowerShell scripts for safety**
+- Developed and run on **Windows**, Docker Desktop
+
+---
+
+### 📁 Folder Structure
+
+```
+adhdboard/
+├── backend/
+│   ├── Dockerfile
+│   ├── .env
+│   ├── package.json
+│   ├── .sequelizerc
+│   ├── config/
+│   │   └── config.js
+│   ├── models/
+│   │   ├── index.js
+│   │   └── user.js
+│   ├── migrations/
+│   │   └── xxxx-create-user.js
+│   └── src/
+│       └── app.js
+├── db/
+│   └── schema.sql
+├── scripts/
+│   ├── safe-up.ps1
+│   ├── db-backup.ps1
+│   └── db-restore.ps1
+└── docker-compose.yml
+```
+
+---
+
+### ⚙️ .env (inside `/backend`)
+```env
+DB_HOST=db
+DB_USER=adhd_user
+DB_PASS=adhd_pass
+DB_NAME=adhdboard
+```
+
+---
+
+### ⚙️ .sequelizerc
+```js
+require('dotenv').config();
+
+const path = require('path');
+
+module.exports = {
+  'config': path.resolve('config', 'config.js'),
+  'models-path': path.resolve('models'),
+  'seeders-path': path.resolve('seeders'),
+  'migrations-path': path.resolve('migrations')
+};
+```
+
+---
+
+### ⚙️ config/config.js
+```js
+require('dotenv').config();
+
+module.exports = {
+  development: {
+    username: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DB_NAME,
+    host: process.env.DB_HOST,
+    dialect: 'mysql'
+  }
+};
+```
+
+---
+
+### 💣 docker-compose.yml (relevant parts)
+```yaml
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    environment:
+      - DB_HOST=db
+      - DB_USER=adhd_user
+      - DB_PASS=adhd_pass
+      - DB_NAME=adhdboard
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: adhdboard
+      MYSQL_USER: adhd_user
+      MYSQL_PASSWORD: adhd_pass
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+
+volumes:
+  db_data:
+```
+
+---
+
+### 🛡 PowerShell Scripts
+
+#### scripts/safe-up.ps1
+```powershell
+Write-Host "🚀 Safely starting ADHDBoard in detached mode..."
+docker-compose up -d --build
+```
+
+#### scripts/db-backup.ps1
+```powershell
+$timestamp = Get-Date -Format "yyyy-MM-dd_HH-mm"
+$backupFile = "db_backup_$timestamp.tar.gz"
+
+docker run --rm `
+  -v db_data:/volume `
+  -v "${PWD}:/backup" `
+  alpine `
+  tar -czf "/backup/$backupFile" -C /volume .
+```
+
+#### scripts/db-restore.ps1
+```powershell
+param ([string]$BackupFile)
+
+if (-not $BackupFile) {
+  Write-Host "❗ Usage: .\db-restore.ps1 <backup-file.tar.gz>"
+  exit 1
+}
+
+docker run --rm `
+  -v db_data:/volume `
+  -v "${PWD}:/backup" `
+  alpine `
+  sh -c "rm -rf /volume/* && tar -xzf /backup/$BackupFile -C /volume"
+```
+
+---
+
+### 🤔 Sequelize CLI Inside Docker
+Run CLI tools inside the container so `DB_HOST=db` works:
+```powershell
+docker exec -it adhdplannerdev-backend-1 npx sequelize-cli model:generate --name Project --attributes name:string
+docker exec -it adhdplannerdev-backend-1 npx sequelize-cli db:migrate
+```
+
+---
+
+### ✅ /users Route Test (in `src/app.js`)
+```js
+app.get('/users', async (req, res) => {
+  const users = await User.findAll();
+  res.json(users);
+});
+```
+
