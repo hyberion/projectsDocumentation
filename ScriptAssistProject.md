@@ -6612,6 +6612,52 @@ class AIRebuttalController extends Controller
 
 
 ---
+Absolutely — here's a clean markdown write-up summarizing what we built today. You can drop this at the bottom of your [`ScriptAssistProject.md`](https://github.com/hyberion/projectsDocumentation/blob/main/ScriptAssistProject.md) file:
+
+---
+
+### ✅ 2025-04-22: Modular Build – Script Section Selector
+
+---
+
+#### 🔧 Functionality:
+- **Script Dropdown**: Lists all active scripts for `agencyID = 1`
+- **Section Checkbox List**:
+  - Hidden until a script is selected
+  - Populated dynamically with all sections tied to the selected script (`scriptId`)
+  - Default checkbox logic:
+    - Sections with `sectionType = 'opening'` are **unchecked**
+    - Sections with `sectionType = 'standard'` are **checked**
+- **Query Result Output**:
+  - Upon form submission, selected section IDs are passed to the backend
+  - A query is executed to retrieve section details
+  - Results are displayed in a formatted list on the page
+
+---
+
+#### 🗃️ Files Created:
+- `routes/web.php`: Added new GET and POST routes for `/script-sections`
+- `app/Http/Controllers/ScriptSectionController.php`: New controller handling both dropdown rendering and section submission
+- `resources/views/script-section-selector.blade.php`: Blade file with:
+  - Script dropdown
+  - Conditional section checkboxes
+  - Query result display block
+
+---
+
+#### 🛠️ Notes:
+- Database uses `script` (not `scripts`) and `agencyID` (not `agencyId`)
+- The `script` table uses `name` for the script label, not `scriptName`
+- `section` table uses `scriptId` as the foreign key
+- Variables passed to the view are consistently named `scripts`, `sections`, and `selectedScriptId` for clarity
+
+---
+
+#### 🧱 Outcome:
+This module is now a fully testable and self-contained feature that will plug directly into the script-builder flow. It can also be reused for administrative tools, QA previews, or advanced filtering logic in later stages.
+
+---
+
 
 
 
