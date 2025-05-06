@@ -847,3 +847,71 @@ Status
 
 Author: ADHDBoard Planning TeamStatus: Deferred Feature, Scaffold ReadyLast Updated: 2025-04-20
 
+
+**Author:** ADHDBoard Planning Team  
+**Status:** Additional items to consider adding from review to two paper planner documents 
+**Last Updated:** 2025-05/06
+
+Sure! Here's a clean and structured **Markdown** version you can drop right into your project spec documentation:
+
+---
+
+### 🧠 ADHD Planner: Analog Page Analysis & Recommendations
+
+#### **Summary of Analyzed Pages**
+
+Two ADHD-friendly daily planner pages were analyzed for function and UX patterns. Both designs reflect supportive strategies tailored to executive function challenges, including:
+
+* Visual sorting of task types (e.g. priorities vs. everything else)
+* Daily intent setting
+* Visual habit/self-care reminders
+* Flexible time-blocking
+* Emotional/mood/energy tracking
+* Routine-based structuring
+
+#### **Notable Sections Identified**
+
+| Section                                    | Purpose                                                                    |
+| ------------------------------------------ | -------------------------------------------------------------------------- |
+| **Today's Focus**                          | Anchors attention with a single daily priority                             |
+| **Tiered Task Lists**                      | Reduces overwhelm by separating “Must Do” / “Do Later” / “Everything Else” |
+| **Daily Schedule**                         | Supports time blocking (somewhat rigid)                                    |
+| **Self-Care Tracker**                      | Visual cues for hygiene, hydration, etc. (icon-based)                      |
+| **Morning/Evening Routines**               | Structures consistent habit cycles                                         |
+| **Brain Dump**                             | Offloads cognitive clutter                                                 |
+| **Mood / Energy / Productivity Check-ins** | Enables self-awareness and future pattern tracking                         |
+| **Reward Fields**                          | Encourages external motivation (mostly ignored in analog use)              |
+| **Delegate Column**                        | Appears in one version; assumes task collaboration                         |
+
+---
+
+### ✅ Recommendations for ADHDBoard
+
+#### **Features to Adopt or Adapt**
+
+| Feature                          | Action     | Notes                                                                  |
+| -------------------------------- | ---------- | ---------------------------------------------------------------------- |
+| **Focus for the Day**            | ✅ Adopt    | Include in morning startup UI flow                                     |
+| **Priority Tiering**             | ✅ Adapt    | Use drag-and-drop, color-coding, or toggles                            |
+| **Self-Care Icons**              | ✅ Adopt    | Use as daily tap toggles with optional reminders                       |
+| **Brain Dump**                   | ✅ Adopt    | Include tagging and AI-sorting in future versions                      |
+| **Mood / Energy / Productivity** | ✅ Adopt    | Simple inputs, visual charts, potential Clarity AI insights            |
+| **Routine Sections**             | ✅ Adapt    | Allow saved templates, offer reminders or streaks                      |
+| **Time Blocking**                | ⚠️ Adapt   | Avoid rigid scheduling; use optional Pomodoro blocks or loose snapping |
+| **Reward System**                | ⚠️ Adapt   | Visual/audio feedback or gamified badges vs. manual reward entry       |
+| **Delegate Column**              | ❓ Optional | Include only if team collaboration is supported later                  |
+
+---
+
+### 🛠 Feature Ideas Sparked
+
+* **Morning Launch Modal**: Collect focus, mood, energy, and top 3 priorities at app launch
+* **Visual Brain Dump**: Accepts voice, images, and text; organizes via tags or AI
+* **Self-Care Radar**: Visual daily tracker with habit streaks and reminders
+* **Routine Builder**: Create & repeat morning/evening templates
+* **Reward Animations**: Add celebratory micro-interactions to task completion
+
+---
+
+
+
