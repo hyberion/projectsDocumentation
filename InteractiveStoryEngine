@@ -1,0 +1,91 @@
+Here’s a Markdown summary for your project spec file:
+
+---
+
+# Immersive Story Engine
+
+## **Project Concept**
+
+The Immersive Story Engine is a modular, multimedia storytelling tool designed for storytellers rather than developers. It allows users to create interactive, branching stories that can incorporate media, audio, interactivity, logic, and variable tracking. The exported stories will be standalone applications that can run cross-platform, either online or offline, without engine bloat.
+
+---
+
+## **Core Features**
+
+### **1. Story Structure and Interaction**
+
+* Interactive storytelling with real-world/user-supplied commands and interaction.
+* Index card/corkboard metaphor for structuring story flow and branching.
+* Real-time character interactions via a conversation engine that supports unscripted dialogue.
+* Progression system to track user progress, inventory, history, interactions, and task completion.
+
+---
+
+### **2. Media and Interactivity**
+
+* Incorporates audio, video, animations, and other media types.
+* Interactive elements such as browsing a virtual computer or flipping through a book.
+* Supports RPG mechanics, including inventory and task lists.
+
+---
+
+### **3. Customization and Export**
+
+* Customizable look and feel for the exported stories.
+* Efficient, standalone export of stories as cross-platform executables.
+* Online by default, with offline functionality available per story.
+
+---
+
+### **4. Performance and Security**
+
+* Sandboxed environment to prevent misuse or malicious behavior.
+* Optimized for performance to ensure efficient playback on various devices.
+
+---
+
+## **Technical Approach**
+
+* **Technology Stack:** Electron with a front-end framework (React or Vue) to balance interactivity, multimedia support, and modularity.
+* **Exported Story Format:** Standalone executables for Windows, macOS, and Linux.
+* **Online/Offline Modes:** Online by default with offline availability as an option for individual stories.
+* **Modular Architecture:** Separate authoring tool to prevent bloat in exported stories.
+
+---
+
+## **Development Phases**
+
+### **Phase 1: Core Prototype**
+
+* Establish core story structure using the index card metaphor.
+* Implement basic branching and user interactions.
+* Integrate simple media (images, text, audio).
+* Test basic export as a standalone executable.
+
+### **Phase 2: Media and Logic Expansion**
+
+* Introduce richer media support (video, animations).
+* Develop the conversation engine for real-time character interactions.
+* Implement basic RPG mechanics and progression tracking.
+
+### **Phase 3: Customization and Export**
+
+* Add customization options for story appearance.
+* Improve export settings (online/offline, platform-specific builds).
+* Implement security and sandboxing measures.
+
+### **Phase 4: Advanced Features**
+
+* Add real-time multiplayer (chat and interaction).
+* Integrate game rulesets for more complex RPG mechanics.
+* Optimize for performance and cross-platform stability.
+
+---
+
+## **Next Steps**
+
+1. Validate the chosen tech stack with a simple prototype.
+2. Design the basic data structure for stories, media, and interactions.
+3. Draft wireframes for the authoring tool interface.
+
+---
