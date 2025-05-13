@@ -6,260 +6,175 @@ This will be a living document to track, document, and catpure all the elements,
 The following is the database schema for Script Assist as of 4/4/25
 
 **Begin Schema**
-```markdown
+
 # Database Schema Overview
 
 This document outlines the database schema for the `script_assist` database. It includes the tables, their structure, and the relationships between them.
 
-## 1. Core Entities and Their Relationships
+## Script Assist Project Documentation
 
-### Clients
-- **Table**: `client`
-  - **Columns**:
-    - `id`: INT (Primary Key)
-    - `firstName`: VARCHAR(255)
-    - `lastName`: VARCHAR(255)
-    - `dob`: DATE
-    - `phone`: VARCHAR(255)
-    - `email`: VARCHAR(255)
-    - `union`: VARCHAR(255)
-    - `created_at`: TIMESTAMP
-    - `updated_at`: TIMESTAMP
-    - `marital_status`: INT (Foreign Key)
-    - `notes`: TEXT
-  - **Relationships**:
-    - `marital_status` references `marital_status_lookup(id)`.
-    - Related to `client_address`, `client_relationships`, and `referrals`.
+### 1. Core Entities and Their Relationships
 
-### Agents
-- **Table**: `agent`
-  - **Columns**:
-    - `id`: INT (Primary Key)
-    - `firstName`: VARCHAR(255)
-    - `lastName`: VARCHAR(255)
-    - `email`: VARCHAR(255)
-    - `password`: VARCHAR(255)
-    - `phone`: VARCHAR(255)
-    - `lastLogin`: TIMESTAMP
-    - `createdAt`: DATETIME
-    - `updatedAt`: DATETIME
-    - `agency`: INT (Foreign Key)
-    - `status`: INT (Foreign Key)
-  - **Relationships**:
-    - `agency` references `agency(id)`.
-    - `status` references `agent_status_lookup(id)`.
+#### Clients
 
-### Agencies
-- **Table**: `agency`
-  - **Columns**:
-    - `id`: INT (Primary Key)
-    - `name`: VARCHAR(255)
-    - `address`: VARCHAR(255)
-    - `city`: VARCHAR(255)
-    - `zip`: VARCHAR(255)
-    - `phone`: VARCHAR(255)
-    - `email`: VARCHAR(255)
-    - `website`: VARCHAR(255)
-    - `industry`: VARCHAR(255)
-    - `active`: TINYINT(1)
-    - `dateCreated`: TIMESTAMP
-    - `lastUpdated`: TIMESTAMP
-    - `state`: INT (Foreign Key)
-  - **Relationships**:
-    - `state` references `stateLookup(id)`.
+* **Table:** `client`
 
-## 2. Address Management
+  * **Columns:**
 
-### Addresses
-- **Table**: `address`
-  - **Columns**:
-    - `id`: INT (Primary Key)
-    - `streetAddress`: VARCHAR(255)
-    - `aptSuite`: VARCHAR(255)
-    - `city`: VARCHAR(255)
-    - `state`: INT (Foreign Key)
-    - `zipCode`: VARCHAR(20)
-    - `createdAt`: TIMESTAMP
-    - `lastUpdated`: TIMESTAMP
-  - **Relationships**:
-    - `state` references `stateLookup(id)`.
+    * `id`: INT (Primary Key)
+    * `firstName`: VARCHAR(255)
+    * `lastName`: VARCHAR(255)
+    * `dob`: DATE
+    * `phone`: VARCHAR(255)
+    * `email`: VARCHAR(255)
+    * `union`: VARCHAR(255)
+    * `created_at`: TIMESTAMP
+    * `updated_at`: TIMESTAMP
+    * `marital_status`: INT (Foreign Key to `marital_status_lookup`)
+    * `notes`: TEXT
 
-### Client Addresses
-- **Table**: `client_address`
-  - **Columns**:
-    - `id`: INT (Primary Key)
-    - `clientId`: INT (Foreign Key)
-    - `addressId`: INT (Foreign Key)
-    - `addressType`: INT (Foreign Key)
-    - `isPrimary`: TINYINT(1)
-  - **Relationships**:
-    - `clientId` references `client(id)`.
-    - `addressId` references `address(id)`.
+#### Addresses
 
-## 3. Lookup Tables
+* **Table:** `address`
 
-### State Lookup
-- **Table**: `stateLookup`
-  - **Columns**:
-    - `id`: INT (Primary Key)
-    - `stateCode`: VARCHAR(2)
-    - `stateName`: VARCHAR(50)
+  * **Columns:**
 
-### Marital Status Lookup
-- **Table**: `marital_status_lookup`
-  - **Columns**:
-    - `id`: INT (Primary Key)
-    - `maritalStatus`: VARCHAR(255)
+    * `id`: INT (Primary Key)
+    * `streetAddress`: VARCHAR(255)
+    * `aptSuite`: VARCHAR(255)
+    * `city`: VARCHAR(255)
+    * `state`: INT (Foreign Key to `stateLookup`)
+    * `zipCode`: VARCHAR(20)
+    * `createdAt`: TIMESTAMP
+    * `lastUpdated`: TIMESTAMP
 
-### Agent Status Lookup
-- **Table**: `agent_status_lookup`
-  - **Columns**:
-    - `id`: INT (Primary Key)
-    - `status`: VARCHAR(50)
+#### Agents
 
-## 4. Scripts and Presentations
+* **Table:** `agent`
 
-### Scripts
-- **Table**: `script`
-  - **Columns**:
-    - `id`: INT (Primary Key)
-    - `name`: VARCHAR(255)
-    - `description`: VARCHAR(255)
-    - `agencyID`: INT (Foreign Key)
-    - `active`: TINYINT(1)
-    - `version`: INT
-    - `createdAt`: TIMESTAMP
-    - `updatedAt`: TIMESTAMP
-  - **Relationships**:
-    - `agencyID` references `agency(id)`.
+  * **Columns:**
 
-### Presentations
-- **Table**: `presentations`
-  - **Columns**:
-    - `id`: INT (Primary Key)
-    - `scriptId`: INT (Foreign Key)
-    - `createdAt`: TIMESTAMP
-    - `updatedAt`: TIMESTAMP
-    - `clientID`: INT (Foreign Key)
-    - `selected_sections`: JSON
-  - **Relationships**:
-    - `scriptId` references `script(id)`.
-    - `clientID` references `client(id)`.
+    * `id`: INT (Primary Key)
+    * `firstName`: VARCHAR(255)
+    * `lastName`: VARCHAR(255)
+    * `email`: VARCHAR(255)
+    * `password`: VARCHAR(255)
+    * `phone`: VARCHAR(255)
+    * `lastLogin`: TIMESTAMP
+    * `createdAt`: DATETIME
+    * `updatedAt`: TIMESTAMP
+    * `agency`: INT (Foreign Key to `agency`)
+    * `status`: INT (Foreign Key to `agent_status_lookup`)
 
-### Sales Presentations
-- **Table**: `sales_presentation`
-  - **Columns**:
-    - `id`: BIGINT (Primary Key)
-    - `presentation_id`: INT (Foreign Key)
-    - `agent_id`: INT (Foreign Key)
-    - `client_id`: INT (Foreign Key)
-    - `outcome_id`: BIGINT (Foreign Key)
-    - `start_time`: TIMESTAMP
-    - `end_time`: TIMESTAMP
-    - `notes`: TEXT
-    - `created_at`: TIMESTAMP
-    - `updated_at`: TIMESTAMP
-  - **Relationships**:
-    - `presentation_id` references `presentations(id)`.
-    - `agent_id` references `agent(id)`.
-    - `client_id` references `client(id)`.
-    - `outcome_id` references `presentation_outcome_lookup(id)`.
+#### Scripts
 
-## 5. Relationships Between Clients
+* **Table:** `script`
 
-### Client Relationships
-- **Table**: `client_relationships`
-  - **Columns**:
-    - `id`: INT (Primary Key)
-    - `client_id_1`: INT (Foreign Key)
-    - `client_id_2`: INT (Foreign Key)
-    - `relationship_type_id`: INT (Foreign Key)
-  - **Relationships**:
-    - `client_id_1` references `client(id)`.
-    - `client_id_2` references `client(id)`.
-    - `relationship_type_id` references `relationship_type_lookup(id)`.
+  * **Columns:**
 
-### Referrals
-- **Table**: `referrals`
-  - **Columns**:
-    - `id`: INT (Primary Key)
-    - `clientId`: INT (Foreign Key)
-    - `firstName`: VARCHAR(255)
-    - `lastName`: VARCHAR(255)
-    - `relationshipTypeID`: INT (Foreign Key)
-    - `phone`: VARCHAR(255)
-    - `email`: VARCHAR(255)
-    - `createdAt`: TIMESTAMP
-    - `notes`: TEXT
-    - `lastUpdated`: TIMESTAMP
-  - **Relationships**:
-    - `clientId` references `client(id)`.
-    - `relationshipTypeID` references `relationship_type_lookup(id)`.
+    * `id`: INT (Primary Key)
+    * `name`: VARCHAR(255)
+    * `description`: VARCHAR(255)
+    * `agencyID`: INT (Foreign Key to `agency`)
+    * `active`: TINYINT
+    * `version`: INT
+    * `createdAt`: TIMESTAMP
+    * `updatedAt`: TIMESTAMP
 
-## 6. Miscellaneous Tables
+#### Script Content
 
-### Failed Jobs
-- **Table**: `failed_jobs`
-  - **Columns**:
-    - `id`: BIGINT (Primary Key)
-    - `uuid`: VARCHAR(255)
-    - `connection`: TEXT
-    - `queue`: TEXT
-    - `payload`: LONGTEXT
-    - `exception`: LONGTEXT
-    - `failed_at`: TIMESTAMP
+* **Table:** `scriptContent`
 
-### Migrations
-- **Table**: `migrations`
-  - **Columns**:
-    - `id`: INT (Primary Key)
-    - `migration`: VARCHAR(255)
-    - `batch`: INT
+  * **Columns:**
 
-### Password Reset Tokens
-- **Table**: `password_reset_tokens`
-  - **Columns**:
-    - `email`: VARCHAR(255) (Primary Key)
-    - `token`: VARCHAR(255)
-    - `created_at`: TIMESTAMP
+    * `id`: INT (Primary Key)
+    * `scriptLine`: MEDIUMTEXT
+    * `linked_slide_id`: INT (Foreign Key to `slide`)
+    * `lineSortOrder`: INT
+    * `sectionID`: INT (Foreign Key to `section`)
+    * `active`: TINYINT
+    * `createdAt`: TIMESTAMP
+    * `updatedAt`: TIMESTAMP
+    * `contentType`: INT (Foreign Key to `scriptContentType`)
+    * `cssOverrideClass`: VARCHAR(255)
+    * `formId`: INT (Foreign Key to `scriptForms`)
+    * `unionType`: ENUM('regular', 'union', 'both')
+    * `scriptId`: INT (Foreign Key to `script`)
 
-### Personal Access Tokens
-- **Table**: `personal_access_tokens`
-  - **Columns**:
-    - `id`: BIGINT (Primary Key)
-    - `tokenable_type`: VARCHAR(255)
-    - `tokenable_id`: BIGINT
-    - `name`: VARCHAR(255)
-    - `token`: VARCHAR(64)
-    - `abilities`: TEXT
-    - `last_used_at`: TIMESTAMP
-    - `expires_at`: TIMESTAMP
-    - `created_at`: TIMESTAMP
-    - `updated_at`: TIMESTAMP
+### 2. Presentation and Sales Tracking
 
-### Lookup Types
-- **Table**: `presentationType`
-  - **Columns**:
-    - `id`: INT (Primary Key)
-    - `typeName`: VARCHAR(255)
-    - `agencyId`: INT (Foreign Key)
+#### Presentations
 
-### Presentation Outcomes
-- **Table**: `presentation_outcome_lookup`
-  - **Columns**:
-    - `id`: BIGINT (Primary Key)
-    - `outcome_name`: VARCHAR(255)
-    - `created_at`: TIMESTAMP
-    - `updated_at`: TIMESTAMP
+* **Table:** `presentations`
 
-### Scripts Content
-- **Table**: `scriptContent`
-  - **Columns**:
-    - `id`: INT (Primary Key)
-    - `scriptLine`: MEDIUMTEXT
-    - `linked_slide_id`: INT (Foreign Key)
-    - `lineSortOrder
-```
+  * **Columns:**
+
+    * `id`: INT (Primary Key)
+    * `scriptId`: INT (Foreign Key to `script`)
+    * `createdAt`: TIMESTAMP
+    * `updatedAt`: TIMESTAMP
+    * `clientID`: INT (Foreign Key to `client`)
+    * `selected_sections`: JSON
+
+#### Sales Presentation
+
+* **Table:** `sales_presentation`
+
+  * **Columns:**
+
+    * `id`: BIGINT (Primary Key)
+    * `presentation_id`: INT (Foreign Key to `presentations`)
+    * `agent_id`: INT (Foreign Key to `agent`)
+    * `client_id`: INT (Foreign Key to `client`)
+    * `outcome_id`: BIGINT (Foreign Key to `presentation_outcome_lookup`)
+    * `start_time`: TIMESTAMP
+    * `end_time`: TIMESTAMP
+    * `notes`: TEXT
+    * `created_at`: TIMESTAMP
+    * `updated_at`: TIMESTAMP
+
+### 3. Slide and Section Management
+
+#### Slides
+
+* **Table:** `slide`
+
+  * **Columns:**
+
+    * `id`: INT (Primary Key)
+    * `slideTitle`: VARCHAR(255)
+    * `slideDescription`: VARCHAR(255)
+    * `slideURL`: VARCHAR(255)
+    * `sectionID`: INT (Foreign Key to `section`)
+    * `sortOrder`: INT
+    * `scriptVersion`: INT
+    * `active`: TINYINT
+    * `slideContent`: TEXT
+    * `customerData`: JSON
+    * `slideType`: VARCHAR(50)
+    * `transition_type`: VARCHAR(50)
+    * `transition_duration`: INT
+    * `createdAt`: TIMESTAMP
+    * `updatedAt`: TIMESTAMP
+
+#### Sections
+
+* **Table:** `section`
+
+  * **Columns:**
+
+    * `id`: INT (Primary Key)
+    * `sectionName`: VARCHAR(255)
+    * `sectionSortOrder`: INT
+    * `active`: TINYINT
+    * `createdAt`: TIMESTAMP
+    * `updatedAt`: TIMESTAMP
+    * `sectionType`: ENUM('opening', 'standard')
+    * `isOptional`: TINYINT
+    * `presentationType`: INT (Foreign Key to `presentationType`)
+    * `scriptId`: INT (Foreign Key to `script`)
+
+This detailed table overview provides a structured breakdown of the primary entities in Script Assist, covering client, script, presentation, and sales tracking. For complete field definitions and relationships, refer to the full database schema.
 
 
 ## Tech Stack
